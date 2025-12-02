@@ -24,6 +24,7 @@ config_gic:
               ldr r0, =MPCORE_GIC_DIST // base address of distributor control register
               str r1, [r0]             // write enable=1 to ICDDCR
 
+              pop {lr}
               bx lr                    // return
 
 

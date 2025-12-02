@@ -16,14 +16,12 @@ _start:
             /* setup stack pointers for IRQ processor mode */
             mov r1, #0b11010010     // switch CPSR mode to 10010 (IRQ) and 
             msr cpsr_c, r1          // set I and F bits to disable interrupts
-            ldr sp, =A9_ONCHIP_END-16  // set IRQ stack pointer to top of onchip A9 memory
-            //ldr sp, =0xfffffff0    // set IRQ stack pointer to top of onchip A9 memory
+            ldr sp, =A9_ONCHIP_END-15  // set IRQ stack pointer to top of onchip A9 memory
 
             /* repeat process for SVC processor mode */
             mov r1, #0b11010011     // switch CPSR mode to 10011 (SVC) and 
             msr cpsr_c, r1          // set I and F bits to disable interrupts
             ldr sp, =DDR_END-3    // set SVC stack pointer to top of DDR3 memory
-            // ldr sp, =0x3fffffff -3    // set SVC stack pointer to top of DDR3 memory
 
             /* configure generic interrupt controller (GIC) */
             bl config_gic
@@ -55,7 +53,7 @@ service_irq:
                   push {r0-r7,lr}
 
                   ldr r4, =MPCORE_GIC_CPUIF  // GIC CPU interface register (ICCIAR) base address
-                  str r5, [r4, #ICCEOIR]     // read interrupt ID from interrupt ack register
+                  ldr r5, [r4, #ICCIAR]     // read interrupt ID from interrupt ack register
 FPGA_IRQ1_HANDLER:
                   cmp r5, #73           // 73 is KEY3..0 IRQ
 unexpected:       bne unexpected        // loop forever here if not a KEY interrupt
