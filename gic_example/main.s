@@ -11,6 +11,7 @@
 
 .text
 .include "address_map_arm.s"
+.include "interrupt_ID.s"
 .global _start
 _start:
             /* setup stack pointers for IRQ processor mode */
@@ -55,12 +56,12 @@ service_irq:
                   ldr r4, =MPCORE_GIC_CPUIF  // GIC CPU interface register (ICCIAR) base address
                   ldr r5, [r4, #ICCIAR]     // read interrupt ID from interrupt ack register
 FPGA_IRQ1_HANDLER:
-                  cmp r5, #73           // 73 is KEY3..0 IRQ
+                  cmp r5, #KEYS_IRQ
 unexpected:       bne unexpected        // loop forever here if not a KEY interrupt
 
                   bl key_isr            // dispatch KEY interrupt service routine
 EXIT_IRQ:
-                  str r5, [r4, #0x10]   // clear interrupt in ICCEOIR (end of interrupt reg)
+                  str r5, [r4, #ICCEOIR]   // clear interrupt in ICCEOIR (end of interrupt reg)
 
                   pop {r0-r7, lr}
                   subs pc, lr, #4       // return back to user code (PC+4 - 4)

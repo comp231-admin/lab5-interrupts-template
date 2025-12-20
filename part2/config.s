@@ -1,5 +1,6 @@
 .global config_gic, config_hps_timer, config_keys
 .include "address_map_arm.s"
+.include "interrupt_ID.s"
 
 /* config_gic - setup interrupt handling for keys  */
 config_gic:
@@ -10,7 +11,7 @@ config_gic:
               // TODO insert configuration code here
 
               /* configure interrupt handling for FPGA KEYs (id 73) */
-              mov r0, #73          // interrupt id for FPGA KEYs
+              mov r0, #KEYS_IRQ    // interrupt id for FPGA KEYs
               mov r1, #0x1         // target CPU mask (CPU0)
               bl config_interrupt
 

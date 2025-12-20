@@ -120,18 +120,30 @@ Fig. 1.
 When you move through adding the project files, you should see the screen shown
 in Fig. 1. It should be setup for *Exceptions*, which creates a short block at
 the beginning of the computer memory that holds the *interrupt vector*. These
-are the addresses of functions to jump to when the CPU receives an interrupt.\
+are the addresses of functions to jump to when the CPU receives an interrupt.
+
 The sample program waits for a key to be pressed, which causes an interrupt to
 be sent to the CPU which calls the main interrupt handler, ` service_irq()`.
 This function then calls the key interrupt handler, (`key_isr()`), the function
-which turns on one of the LED lights.\ Your task for this part is to update the
-`key_isr()` code to write the number of the key that was pressed to the first
-seven-segment display. The first four seven-segment displays (SSD) are
-controlled by writing a single 32-bit value to the address `HEX3_HEX0_BASE`,
-the same as in previous labs.\ The four keys are numbered `KEY0, KEY1, KEY2,`
-and `KEY3`. Update your program to light up a zero on the SSD when `KEY0` is
-pressed, a one when `KEY1` is pressed, etc. You may use the helper functions in
-`util.s` to generate the SSD patterns.
+which turns on one of the LED lights.
+
+Your task for this part is to update the `key_isr()` code to write the number
+of the key that was pressed to the first seven-segment display. The first four
+seven-segment displays (SSD) are controlled by writing a single 32-bit value to
+the address `HEX3_HEX0_BASE`, the same as in previous labs. *Each key must
+correspond to a distinct seven-segment display*. I.e. `KEY0` maps to `HEX0`,
+`KEY1 maps to `HEX1`, etc.
+
+The four keys are numbered `KEY0, KEY1, KEY2,` and `KEY3`. Update your
+program to light up a zero on the SSD when `KEY0` is pressed, a one when
+`KEY1` is pressed, etc. Each display digit should start off blank and the
+digit toggled on every keypress. E.g. If the `KEY0` is pressed once the
+display should go from blank to displaying a zero, if it is pressed again then
+it should go back to blank, toggling back and forth for each keypress. This
+same behavior should work for all four key buttons and their matching
+seven-segment displays.  You may use the helper functions in `util.s` to
+generate the SSD patterns.
+
 
 # Part 2 - Timer Interrupts
 
